@@ -4,7 +4,7 @@
 [2. WAS (Web Application Server)](#2-was-web-application-server)  
 [3. Web System](#3-web-system)
 
-![Alt text](image-1.png)
+![Alt text](../image/web-server.png)
 <br><br>
 ---
 
