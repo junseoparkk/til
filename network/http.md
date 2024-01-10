@@ -60,4 +60,20 @@
    1) General Headers : 메시지 전체에 적용되는 헤더
    2) Response Headers : 상태 줄에 담지 못한 서버에 대한 추가 정보를 제공
    3) Entity Header : 요청 내에 본문이 있는 경우, 본문 내용과 관련된 정보를 제공
+<br><br>
+
+### 4. HTTP Request Data
+1. GET - Query Parameter
+   - /url?key1=value1&key2=value2 형식
+   - 메시지 바디 없이 URL 의 쿼리 파라미터에 데이터를 포함하여 전달
+   - ex) 검색, 필터, 페이징 등에서 주로 사용
+2. POST - HTML Form
+   - content-type: application/x-www-form-urlencoded -> HTML Form 으로 전달된 데이터
+   - 메시지 바디에 쿼리 파라미터 형식으로 데이터를 포함하여 전달
+   - ex) 회원 가입, 상품 주문 등에서 주로 사용
+3. HTTP message body
+   - body 에 데이터를 직접 담아서 요청
+   - HTTP API 에서 주로 사용 ex) JSON, XML, TEXT
+   - 주로 JSON 형식으로 데이터를 전달
+   - POST, PUT, PATCH
 
