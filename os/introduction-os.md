@@ -2,7 +2,8 @@
 
 ## 1️⃣ 운영체제 (OS, Operating System)
 
-![image](https://github.com/junseoparkk/til/assets/98972385/8326b7ba-98a1-4e3a-bb73-270b60d6ffa8)
+![image](https://github.com/junseoparkk/til/assets/98972385/a6cce02e-53d9-4c2d-b349-96c1f9817057)
+
 
 
 ### 1) 운영체제란?
