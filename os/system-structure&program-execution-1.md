@@ -94,3 +94,8 @@ CPU는 키보드 컨트롤러에게 만약 사용자 Input이 있다면 알려�
 
 ## 4️⃣ 시스템 콜 (System Call)
 사용자 프로그램이 운영체제의 서비스를 받기 위해 커널 함수를 호출하는 것
+<br><br>
+
+---
+references<br>
+KOCW 반효경-Introduction to Operating Systems
