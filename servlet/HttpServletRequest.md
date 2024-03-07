@@ -115,6 +115,7 @@ private void printStartLine(HttpServletRequest request) {
 |getContentLength()|숫자|데이터 길이 반환|
 |getCharacterEncoding()|UTF-8|	데이터 인코딩 방식 반환|
 <br>
+
 ``````java
 private void printHeaderUtils(HttpServletRequest request) {
         System.out.println("--- START Header INFO ---");
