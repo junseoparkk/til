@@ -71,3 +71,9 @@
 
 - 1, 4에서의 스케줄링 : nonpreemptive (= 강제로 빼앗지 않고 자진 반납)
 - 나머지 스케줄링 : preemptive (= 강제로 빼앗음)
+<br><br>
+
+---
+#### references
+- ABRAHAM SILBERSCHATZ ET AL., OPERATING SYSTEM CONCEPTS, NINTH EDITION, WILEY, 2013
+- 반효경, 운영체제와 정보기술의 원리, 이화여자대학교 출판부, 2008

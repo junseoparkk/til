@@ -192,4 +192,7 @@ docker run -d --name process2 -e MYSQL_ROOT_PASSWORD=1234 mysql
   
 ![image](https://github.com/junseoparkk/til/assets/98972385/12bbc9f7-38c3-4501-84b8-cab8b1481e5b)
 <br><br>
-
+---
+#### references
+- ABRAHAM SILBERSCHATZ ET AL., OPERATING SYSTEM CONCEPTS, NINTH EDITION, WILEY, 2013
+- 반효경, 운영체제와 정보기술의 원리, 이화여자대학교 출판부, 2008
