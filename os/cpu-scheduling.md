@@ -117,7 +117,7 @@
 
 ### ❗️ 예시
 
-<img width="316" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/a35dc0a4-99a3-47f7-b44c-9581af0b17b7">
+<img width="350" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/a35dc0a4-99a3-47f7-b44c-9581af0b17b7">
 
 
 |Process|Arrival Time|Burst Time|
@@ -131,6 +131,7 @@
 - Average Waiting Time : (0 + 24 + 27) / 3 = 17
 <br><br>
 
+---
 ### 2) SJF (Shortest - Job - First)
 - 각 프로세스의 다음번 CPU burst time을 가지고 스케줄링에 활용
 - CPU burst time이 가장 짧은 프로세스를 가장 먼저 스케줄링하는 방법
@@ -155,17 +156,19 @@
 |P4|5.0|4|
 
 ### 1. Non-Preemptive
-<img width="316" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/d97a5659-32fc-4ddb-977c-36b22fea8f71">
+<img width="350" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/d97a5659-32fc-4ddb-977c-36b22fea8f71">
+<br><br>
 
 - 0.0초에 도착한 프로세스는 P1밖에 없으므로 P1이 CPU를 얻음
 - 7초 뒤 P2 ~ P4까지 모두 도착
 - 다음으로 burst time이 가장 짧은 P3가 CPU를 얻음
 - 즉, P1 -> P3 -> P2 -> P4 순서로 CPU를 얻음
 - Average Waiting Time = (0 + 3 + 6 + 7) / 4 = 4
-<br>
+<br><br>
 
 ### 2. Preemptive
-<img width="329" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/59b08e30-39cf-47df-9bd4-9579e11832e5">
+<img width="350" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/59b08e30-39cf-47df-9bd4-9579e11832e5">
+<br><br>
 
 - 0.0초에 도착한 프로세스는 P1밖에 없으므로 P1이 CPU를 받음
 - 2.0초에 P2가 도착, P1보다 burst time이 짧은 P2에게 CPU를 넘김 `(P1 : 5 > P2 : 4)`
@@ -183,6 +186,7 @@
       - 현재와 가까울 경우 높은 가중치, 과거와 가까울 경우 낮은 가중치
 <br><br>
 
+---
 ### 3) Priority Scheduling
 - 우선순위가 가장 높은 프로세스에게 CPU를 할당하는 방법
   - 우선순위는 정수로 주어짐 (정수가 낮을수록 우선순위가 높음)
@@ -195,6 +199,7 @@
   - Aging (노화) : 우선순위가 낮더라도 오래 기다린다면 우선순위를 높이는 기법
 <br><br>
 
+---
 ### 4) Round Robin (RR)
 - 각 프로세스는 동일한 크기의 할당 시간(time quantum)을 가짐 (일반적으로 10-100 m/s)
 - 할당 시간이 지나면 프로세스는 선점당하고 ready queue의 맨 뒤로 가서 다시 대기
@@ -207,6 +212,93 @@
   - q small = context switch 오버헤드가 커짐
   - 적당한 time quantum을 설정해야함
   - `일반적으로 SJF 보다 average turnaround time이 길지만, response time은 더 짧음`
+<br><br>
+
+---
+### 5) Multilevel Queue
+
+<img width="600" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/0ca3c315-59b0-44bd-b744-570ccf124c3b">
+<br><br>
+
+- Ready queue 를 여러 개로 분할
+  - foreground (interactive) : 상호작용
+  - background (batch) : CPU만 오랫동안 사용
+- 각 큐는 독립적인 스케줄링 알고리즘을 가짐
+  - foreground : RR
+  - background : FCFS
+- 큐에 대한 스케줄링이 필요
+  - Fixed priority scheduling
+  - Time slice
+<br><br>
+
+---
+### 6) Multilevel Feedback Queue
+
+<img width="600" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/e348b375-1663-4007-8c67-970b43187775">
+<br><br>
+
+- 프로세스가 다른 큐로 이동 가능
+- 'Aging'을 이와 같은 방식으로 구현할 수 있음
+- `Multilevel-feedback-queue scheduler` 를 정의하는 파라미터
+  - Queue 의 수
+  - 각 큐의 스케줄링 알고리즘
+  - 프로세스를 상위 큐로 보내는 기준
+  - 프로세스를 하위 큐로 내쫓는 기준
+  - 프로세스가 CPU 서비스를 받으려 할 때 들어갈 큐를 결정하는 기준
+
+### ❗️ 예시
+- Three queues
+    - Q0 : time quantum 8 m/s
+    - Q1 : time quantum 16 m/s
+    - Q2 : FCFS
+- Scheduling
+  - new job 이 Q0 큐로 들어감
+  - CPU를 잡아서 할당 시간인 8m/s 동안 수행
+  - 8m/s 동안 다 끝내지 못했다면 Q1 큐로 내려감
+  - Q1에 줄서서 기다렸다가 CPU를 잡아 16m/s 동안 수행
+  - 16m/s 동안 다 끝내지 못했다면 Q2 큐로 내려감 (가장 낮은 우선순위)
+<br><br>
+
+## 4️⃣ Special Case Scheduling
+
+### 1) Multiple - Processor Scheduling
+- CPU가 여러 개인 경우 스케줄링은 더욱 복잡해짐
+- Homogeneous processor인 경우
+  - Queue에 한줄로 세워서 각 프로세서가 알아서 꺼내가게 할 수 있음
+  - 반드시 특정 프로세서에서 수행되어야 하는 프로세스가 있는 경우 문제가 복잡해짐
+- Load sharing
+  - 일부 프로세서에 job이 몰리지 않도록 부하를 적절히 공유하는 메커니즘이 필요
+  - 별개의 큐를 두는 방법 vs 공동 큐를 사용하는 방법
+- Symmetric Multiprocessing (SMP)
+  - 각 프로세서가 각자 알아서 스케줄링 방법을 결정
+- Asymmetric Multiprocessing
+  - 하나의 프로세서가 시스템 데이터의 접근과 공유를 책임지고, 나머지 프로세서는 이를 따름
+<br><br>
+
+### 2) Real - Time Scheduling
+- Hard real - time systems
+  - Hard real - time task는 정해진 시간 안에 반드시 끝내도록 스케줄링해야 함
+- Soft real - time systems
+  - Soft real - time task는 일반 프로세스에 비해 높은 우선순위를 갖도록 해야 함
+<br><br>
+
+### 3) Thread Scheduling
+- Local Scheduling
+  - User level thread 의 경우 사용자 수준의 thread library에 의해 어떤 thread를 스케줄할지 결정
+- Global Scheduling
+  - Kernel level thread 의 경우 일반 프로세스와 마찬가지로 커널의 단기 스케줄러가 어떤 thread를 스케줄할지 결정
+<br><br>
+
+## 5️⃣ Algorithm Evaluation
+
+### 1) 어떤 알고리즘이 좋은지 평가하는 방법
+1. Queueing models
+    - 확률 분포로 주어지는 `arrival rate(도착율)` 와(과) `service rate(처리율)` 등을 통해 각종 performance index 값을 계산
+2. Implementation (구현) & Measurement (성능 측정)
+    - 실제 시스템에 알고리즘을 구현하여 실제 작업에 대해 성능을 측정 비교
+3. Simulation (모의 실험)
+    - 알고리즘을 모의 프로그램으로 작성 후 trace를 입력으로 하여 결과 비교
+
 ---
 #### references
 - ABRAHAM SILBERSCHATZ ET AL., OPERATING SYSTEM CONCEPTS, NINTH EDITION, WILEY, 2013
