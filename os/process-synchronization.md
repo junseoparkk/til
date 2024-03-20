@@ -73,10 +73,21 @@
 <br><br>
 
 ---
-### 3) Process Synchronization 문제
+### 3) Process Synchronization Problem
 - 공유 데이터의 동시 접근은 데이터의 불일치 문제를 야기할 수 있음
 - 일관성 유지를 위해서는 협력 프로세스 간의 실행 순서를 정해주는 메커니즘이 필요
 - `Race Condition`
   - 여러 프로세스들이 동시에 공유 데이터에 접근하는 상황
   - 데이터의 최종 연산 결과는 마지막에 해당 데이터를 다룬 프로세스에 따라 달라짐
-- race condition을 막기 위해서 concurrent process는 동기화되어야 함 
+- race condition을 막기 위해서 concurrent process는 동기화되어야 함
+<br><br>
+
+---
+### 4) The Critical - Section Problem
+<img width="700" alt="image" src="https://github.com/junseoparkk/crud-board/assets/98972385/78af904a-aee5-4ade-b73e-d775dea31fe4">
+<br><br>
+
+- n 개의 프로세스가 공유 데이터를 동시에 사용하기를 원하는 경우
+- 각 프로세스의 'code segment' 에는 공유 데이터에 접근하는 코드인 `critical section` 존재
+- 문제 상황
+  - 하나의 프로세스가 critical section에 있을 떄 다른 모든 프로세서는 critical section에 들어갈 수 없어야 함
