@@ -371,6 +371,13 @@ if (S.value <= 0) { // 자원을 내놓았음에도 잠들어있는 상태라면
 - indefinite blocking
 - 프로세스가 suspend 된 이유에 해당하는 세마포어 큐에서 빠져나갈 수 없는 현상
 
+---
+<br><br><br>
+
+#### references
+- ABRAHAM SILBERSCHATZ ET AL., OPERATING SYSTEM CONCEPTS, NINTH EDITION, WILEY, 2013
+- 반효경, 운영체제와 정보기술의 원리, 이화여자대학교 출판부, 2008
+
 
 
 
