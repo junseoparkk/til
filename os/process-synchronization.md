@@ -1,4 +1,4 @@
-# Process Synchronization
+# Process Synchronization - 1
 
 ## 1️⃣ 데이터 접근
 
@@ -91,3 +91,286 @@
 - 각 프로세스의 'code segment' 에는 공유 데이터에 접근하는 코드인 `critical section` 존재
 - 문제 상황
   - 하나의 프로세스가 critical section에 있을 떄 다른 모든 프로세서는 critical section에 들어갈 수 없어야 함
+<br><br>
+
+## 2️⃣ 데이터 접근 문제 해결
+
+### 1) Initial Attempts to Solve Problem
+- 두 개의 프로세스 P0, P1이 있다고 가정
+- 프로세스들의 일반적인 구조
+- 프로세스들은 수행의 동기화 (synchronize) 를 위해 몇몇 변수 공유 가능
+  - `synchronization variable`
+<br><br>
+
+```java
+do {
+  entry section // Lock 설정
+  critical section
+  exit section  // Lcok 해제
+  remainder section
+} while (1);
+```
+<br>
+
+---
+
+### 2) 프로그램적 해결법의 충족 조건
+1. Mutual Exclusion (상호 배제)
+   - 프로세스 Pi가 'critical section' 부분을 수행 중이면 다른 모든 프로세스들은 그들의 critical section 에 들어가면 안 된다.
+2. Progress (진행)
+   - 'critical section' 에 아무도 들어가있지 않은 상태에서 critical section에 들어가고자 하는 프로세스가 있다면 들어가게 해주어야 한다.
+3. Bounded Waiting (유한 대기)
+   - 프로세스가 'critical section' 에 들어가려고 요청한 뒤부터 해당 요청이 허용될 떄까지 다른 프로세스들이 critical section에 들어가는 횟수엔 한계가 있어야 한다.
+<br><br>
+---
+
+### 3) Algorithms
+
+### Algorithm #1
+- Synchronization variable : `int turn`
+- `turn == i` : i 번째 프로세스가 critical section 에 접근할 수 있음을 의미 (차례)
+  - ex) turn = 0, turn = 1
+- 'Mutual Exclusion' 은 만족하지만, 'Progress' 는 만족하지 않음
+  - 특정 프로세스가 critical section 에 들어갔다가 나와야 다음 프로세스로 진행 가능 (turn을 바꿔줘야 함)
+<br>
+
+```java
+do {
+  while (turn != 0) ;
+  critical section
+  turn = 1;
+  remainder section
+} while (1);
+```
+- 처음 turn을 0번째 프로세스로 세팅
+- 0번 프로세스가 프로세스가 아니라면 while문 실행 동안 대기
+- `turn = 0` 이 되면 critical section 으로 진입
+- critical section 에서 나오면 `t`urn = 1` 로 변경
+<br><br>
+
+---
+### Algorithm #2
+- Synchronization variable : `boolean flag[2]`
+- `flag[i] == true` : i 번째 프로세스가 critical section 에 접근할 준비가 됐음을 의미
+- 역시 'Mutual Exclusion' 은 만족하지만, 'Progress' 는 만족하지 않음
+  - 특정 프로세스가 critical section 에 들어갔다가 나와야 flag 를 바꿀 수 있음
+  - 둘 다 while 문까지 수행 후 끊임 없이 양보하는 상황 발생 가능
+<br>
+
+```java
+do {
+  flag[i] = true;
+  while (flag[i]) ;
+  critical section
+  flag[i] = false;
+  remainder section
+} while (1);
+```
+<br>
+
+---
+### Algorithm #3 (Peterson's Algorithm)
+- turn, flag 변수를 모두 사용하는 알고리즘
+- Pi 가 critical section 에 들어가고자 할 때 
+  - `flag[i] = true` : critical section 에 들어가겠다는 것을 명시
+  - `turn = j` : 상대방 턴으로 바꿔 놓음
+  - 들어가기 전 Pj 가 critical section 에 들어갈 것인지, Pj 차례인지 확인
+    - 두 조건을 모두 만족한다면 대기. 즉, Pj가 하나라도 만족하지 않는다면 Pi 가 들어감
+    - 빠져나올 땐 `flag[i] = false` 로 변경
+- 'Mutual Exclustion', 'Progress', 'Bounded Waiting' 모두 만족
+ 
+<br>
+
+```java
+do {
+  flag[i] = true;
+  turn = j;
+  while (flag[j] && turn == j) ;  // waiting
+  critical section
+  flag[i] = false;
+  remainder section
+} while (1);
+```
+- 두 프로세스가 critical section 에 들어가고자 할 때 : turn 으로 구분
+- 아무도 critical section 에 들어가있지 않을 때 : turn 에 관계 없이 들어감
+<br><br>
+
+#### ❗️ Busy Waiting (= Spin Lock) 문제
+- 계속해서 CPU 와 memory 를 사용하면서 wait
+- 특정한 작업이 완료될 때까지 계속 CPU를 사용하기 때문에 리소스 낭비가 발생할 수 있음
+<br><br>
+
+---
+
+### 2) Synchronization Hardware
+
+![image](https://github.com/junseoparkk/til/assets/98972385/3f0822ca-e231-4bd5-9f9e-bf78634c9aab)
+<br>
+
+- Synchronization variable : `boolean lock`
+- 하드웨어적으로 `Test & modify` 를 atomic 하게 하나의 인스트럭션으로 수행할 수 있도록 지원
+- `Test_and_Set` : 하나의 인스트럭션으로 데이터 읽기, 쓰기를 동시에 지원
+  - 초기 Lock = 0 으로 세팅
+  - critical section 에 들어가기 전 Lock = 1 로 변경
+  - Lock 걸려있는지 확인 & Lock 걸려있지 않다면 Lock 을 걸고 진입 -> 동시에 진행
+<br><br>
+
+```java
+do {
+  while (Test_and_Set(lock)) ;
+  critical section
+  lock = false;
+  remainder section
+} while(1);
+```
+<br>
+
+## 3️⃣ Semaphores
+
+### 1) 세마포어란?
+- 추상 자료형, Semaphore 변수 S
+  - integer variable (자원의 개수)
+  - P 연산, V 연산 두 가지 atomic 연산에 의해서만 접근 가능
+- 왜 사용하는가?
+  - Lock 을 걸고 해제하는 기능을 간단하게 제공할 수 있음
+  - 공유 자원을 획득하고 반납하는 것을 처리
+<br><br>
+
+#### 1) P 연산 : P(S)
+- 세마포어 변수 값을 획득하는 과정
+- 공유 데이터를 획득하는 과정
+- Lock 을 거는 과정
+```java
+while (S <= 0) do no-op;
+S--;
+````
+<br>
+
+#### 2) V 연산 : V(S)
+- 공유 데이터 사용 후 반납하는 과정
+- Lock 을 해제하는 과정
+```java
+S++;
+```
+<br>
+
+---
+
+### 2) Critical Section of n Processes
+- Synchronization variable : `mutex`
+  - initially 1 : 1개가 critical section 에 들어갈 수 있음
+<br>
+
+```java
+do {
+  P(mutex);
+  critical section
+  V(mutex);
+  remainder section
+} while (1);
+```
+<br>
+
+- 그럼에도 busy-wait 는 효율적이지 못함 (= spin lock)
+- Block & Wakeup 방식의 구현 (= sleep lock)
+<br><br>
+
+--- 
+
+### 3) Block & Wakeup Implementation (구현)
+```c
+typedef struct {
+  int value;  // semaphore
+  struct process *L;  // process wait queue
+} semaphore;
+```
+
+- Semaphore 를 위처럼 정의
+- block & wakeup 을 다음과 같이 가정
+- `block`
+  - 커널은 block 을 호출한 프로세스를 suspend 시킴
+  - 해당 프로세스의 PCB 를 semaphore 에 대한 wait queue 에 넣음
+- `wakeup(P)`
+  - block 된 프로세스 P 를 wakeup 시킴
+  - 해당 프로세스의 PCB 를 ready queue 로 옮김
+<br><br>
+
+<img width="600" alt="image" src="https://github.com/junseoparkk/til/assets/98972385/b0c9dc28-4164-45ad-9395-6e8e3ac5e15c">
+
+- semaphore 변수를 누군가 획득했다면, 획득하지 못한 프로세스의 PCB 를 semaphore 의 ready queue 에 연결
+<br><br>
+
+#### 1) P(S)
+```java
+S.value--;
+if (S.value < 0) {  // 자원의 여분이 없다면
+  add this process to S.L;  // blocked 상태로 있다가 여분이 생기면 wakeup
+  block();
+}
+```
+
+#### 2) V(S)
+```java
+S.value++;
+if (S.value <= 0) { // 자원을 내놓았음에도 잠들어있는 상태라면
+  remove a process P from S.L;
+  wakeup(P);
+}
+```
+<br>
+
+#### ❗️ S.value 의미
+- 음수일 때 : 누군가 자원을 기다리는 상황
+- 양수일 때 : 자원에 여분이 있기 때문에 기다리지 않고 사용하는 상황
+- 따라서 누군가 깨워야할지를 판단하기 위해 사용
+<br>
+---
+
+### 4) Busy-wait vs Block/wakeup
+- 보통은 block/wakeup 을 사용하는 것이 효율적. 그럼에도 block/wakeup 에도 overhead 가 있음
+- Block/wakeup overhead vs Critical section 길이
+  - Critical section 의 길이가 긴 경우 : Block/wakeup 이 적당
+  - Critical section 의 길이가 매우 짧은 경우 : Blcok/wakeup 오버헤드가 busy-wait 오버헤드보다 더 커질 수 있음
+  - 일반적으로는 Block/wakeup 방식이 더 좋음
+<br>
+
+---
+
+### 5) Types of Semaphore
+1. Counting semaphore
+   - 도메인이 0 이상인 임의의 정수 값
+   - 주로 resource counting 에 사용 (여분의 자원 개수를 판단)
+   - 여분이 있다면 가져다 쓸 수 있음
+2. Binary semaphore (= mutex)
+   - 0 또는 1 값만 가질 수 있는 세마포어
+   - 주로 mutual exclusion (상호배제, lock/unlock) 용도로 사용
+<br><br>
+
+
+## 4️⃣ Deadlock & Starvation
+
+### 1) Deadlock
+- 둘 이상의 프로세스가 서로 상대방에 의해 충족될 수 있는 event를 무한히 기다리는 현상
+- S 와 Q 가 1로 초기화된 semaphore, 특정 작업을 위해 S, Q 모두 획득해야 한다고 가정
+<br><br>
+
+<img width="600" alt="image" src="https://github.com/junseoparkk/til/assets/98972385/e5a4b475-70b1-4445-b604-aedef2b03188">
+<br><br>
+
+- P0, P1 모두 S, Q 를 얻고 반납함
+- P0 가 CPU를 먼저 얻어서 S를 획득한 뒤 CPU를 뺏김
+- P1 은 CPU를 얻어 Q를 획득. 이후 S를 획득하려고 하지만 P0 가 S를 가짐.
+- P0 는 S 작업이 끝난 뒤 내놓기 때문에 P1 은 이를 무한히 대기 (조건 충족 X)
+
+
+#### ❗️ 이를 해결하려면?
+- P1 의 순서를 P(S) - P(Q) 의 순서로 바꿔준다.
+<br><br>
+ 
+### 2) Starvation
+- indefinite blocking
+- 프로세스가 suspend 된 이유에 해당하는 세마포어 큐에서 빠져나갈 수 없는 현상
+
+
+
+
