@@ -38,6 +38,7 @@
 ### Inverted Page Table
 <img width="700" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/d06ca916-a37a-428e-9488-5590eb32dd91">
 <br><br>
+
 - page table이 매우 큰 이유
   - 모든 프로세스별로 해당 logical address에 대응하는 모든 page에 대해 page table entry가 존재
   - 대응하는 page가 메모리에 있는지 상관 없이 page table에는 entry로 존재함

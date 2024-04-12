@@ -281,6 +281,7 @@
 - logical address
 <br>
 <img width="380" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/2eaa28a2-938e-4fdd-8d2a-a2cefa94cd85">
+<br>
 - p1 : outer page table의 index
 - p2 : outer page table의 page에서의 변위(displacement)
 <br><br>
