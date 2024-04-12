@@ -183,17 +183,17 @@
 
 ### 1) Paging
    - 프로세스의 가상 메모리를 동일한 사이즈의 페이지 단위로 나눔
-   - 가상 메모리의 내용이 페이지 단위로 noncontiguous하게 저장됨
+   - 가상 메모리의 내용이 페이지 단위로 noncontiguous(불연속)하게 저장됨
    - 일부는 backing storage에, 일부는 physical memory에 저장
 <br>
 
-2. Basic Method
+1. Basic Method
    - Physical memory를 동일한 크기의 frame으로 나눔
    - Logical memory를 동일한 크기의 page로 나눔 (= frame 크기)
    - 모든 가용 frame들을 관리
    - `page table` 을 사용하여 논리 주소를 물리 주소로 변환
 
-3. Page Table
+2. Page Table
    - 페이지의 개수 만큼 엔트리가 존재 (엔트리의 크기가 정해짐)
    - 인덱스를 통해 논리 주소의 페이지들을 물리 주소의 페이지를 찾음
    - 주소 변환이 이루어질 땐 상대적 위치가 변하지 않음
@@ -294,9 +294,7 @@
 - page of page table(안쪽 테이블)의 페이지 번호를 통해 물리적인 page frame 번호를 얻음
 - 해당 번호에서 d만큼 떨어진 위치에서 원하는 정보를 찾음
 
-
 <br><br>
-
-<br><br>
+---
 references<br>
 KOCW 반효경-Introduction to Operating Systems
