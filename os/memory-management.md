@@ -139,7 +139,7 @@
 
 ## 3️⃣ Memory Management (메모리 관리)
 
-### 1) Allocation of Physical Memory
+### Allocation of Physical Memory
 - 메모리는 일반적으로 두 영역으로 나뉘어 사용
   - OS 상주 영역 : interrupt vector 와 함께 낮은 주소 영역 사용
   - 사용자 프로세스 영역 : 높은 주소 영역 사용
@@ -157,8 +157,146 @@
          - 같은 크기의 페이지 단위로 나눠 분산
        - Segmentation
        - Paged Segmentation
-
-
+<br><br>
 ---
+
+### Contiguous Allocation (연속 할당)
+1. 고정 분할(Fixed Partition) 방식
+   - 물리적 메모리를 몇 개의 영구적 분할(partition)로 나눔
+   - 분할의 크기가 모두 동일한 방식 vs 서로 다른 방식
+   - 분할당 하나의 프로그램을 적재
+   - 융통성이 없음
+     - 동시에 메모리에 load 되는 프로그램 수가 고정
+     - 최대 수행 가능한 프로그램 크기 제한
+   - Internal Fragmentation 발생 (External fragmentation도 발생)
+2. 가변 분할(Variable Partition) 방식
+   - 프로그램의 크기를 고려해서 할당
+   - 분할의 크기, 개수가 동적으로 변환
+   - 기술적 관리 기법 필요
+   - Externer fragmentation 발생
+<br><br>
+---
+
+## 4️⃣ Paging
+<img width="600" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/27905c8d-b7f5-4fdc-b513-68933c532912">
+<br><br>
+
+### 1) Paging
+   - 프로세스의 가상 메모리를 동일한 사이즈의 페이지 단위로 나눔
+   - 가상 메모리의 내용이 페이지 단위로 noncontiguous하게 저장됨
+   - 일부는 backing storage에, 일부는 physical memory에 저장
+<br>
+
+2. Basic Method
+   - Physical memory를 동일한 크기의 frame으로 나눔
+   - Logical memory를 동일한 크기의 page로 나눔 (= frame 크기)
+   - 모든 가용 frame들을 관리
+   - `page table` 을 사용하여 논리 주소를 물리 주소로 변환
+
+3. Page Table
+   - 페이지의 개수 만큼 엔트리가 존재 (엔트리의 크기가 정해짐)
+   - 인덱스를 통해 논리 주소의 페이지들을 물리 주소의 페이지를 찾음
+   - 주소 변환이 이루어질 땐 상대적 위치가 변하지 않음
+<br><br>
+---
+
+### 2) Implementation of Page Table
+- 'Page Table'은 main memory에 상주
+- `Page-table base register (PTBR)` 가 page table을 가리킴
+- `Page-table length register (PTLR)` 가 테이블 크기를 보관
+- 모든 메모리 접근 연산에는 2번의 memory access 필요
+  - page table 접근 : 1회
+  - 실제 data/instruction 접근 : 1회
+- 속도 향상을 위해 `associative register` 혹은 `translation look-aside buffer (TLB)` 라고 불리는 고속의 하드웨어 캐시를 사용
+<br><br>
+
+
+### 🔎 `TLB`
+<img width="500" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/29756d8b-bb17-4244-8399-fc9998251778">
+<br>
+
+- 메모리 주소 변환을 위한 별도의 캐시 메모리
+- page table에서 빈번히 참조되는 페이지를 캐싱
+- 특정 항목이 아니라 전체를 검색
+  - 시간이 오래 걸리기 때문에 병렬 검색 가능
+- CPU가 논리 주소를 주었을 때
+  1. 메모리상의 page table을 검색하기 전에 TLB를 먼저 검색
+  2. 주소 변환 정보 중 TLB에 저장된 정보를 통해 변환이 가능한지를 확인
+     - 가능하다면 TLB를 통해 변환 -> 메모리를 1번만 사용
+     - 불가능하다면 메모리에 접근하여 변환 -> 메모리를 2번 사용
+<br><br>
+---
+
+### 3) Associatice Register
+- Assosiatice registers (TLB) : parallel search 가능
+  - TLB 에는 page table 중 일부만 존재
+- Address translation
+  - page table 중 일부가 associative register에 보관되어 있음
+  - 만약 해당 page가 associativce register에 있을 경우 곧바로 frame을 얻음
+  - 그렇지 않은 경우 main memory에 있는 page table로부터 frame을 얻음
+  - TLB는 context switch 때 flush
+    - 프로세스마다 주소 변환정보가 다르기 때문임
+---
+
+### 4) Effective Access Time
+- Associativce register lookup time (TLB에 접근하는 시간) = 𝜖
+- memory cycle time (메인 메모리 접근하는 시간) = 1
+- Hit ratio (associative register에서 찾아지는 비율) = 𝛼 
+- Effectivce Access Time (메모리에 접근하는 시간)
+  - EAT = (1 + 𝜖)𝛼 + (2 + 𝜖)(1 - a) = 2 + 𝜖 - a
+  - 결국 해당 값이 page table만 있을 때 걸리는 시간인 2보다는 작다 -> 빠름
+---
+
+### 5) Two-Level Page Table
+<img width="500" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/fafa0ea1-4d8b-4e60-b769-68736c7565cb">
+<br><br>
+
+- 현대의 컴퓨터는 주소 공간이 매우 큰 프로그램을 지원
+- 32 bit address 사용시 : 2^32B (4G) 의 주소 공간 (최근엔 64bit)
+  - page size가 4K시 1M개의 page table entry 필요
+  - 각 page entry가 4B 라면 프로세스당 4M의 page table 필요
+  - 하지만 대부분의 프로그램은 4G의 주소 공간 중 아주 작은 일부분만 사용하므로 page table의 낭비가 심함
+
+- B(바이트), K(킬로 바이트), M(메가 바이트), G(기가 바이트)
+
+❗️해결
+- page table 자체를 page로 구성
+- 사용되지 않는 주소 공간에 대한 outer page table의 엔트리 값은 NULL (대응하는 inner page table 없음)
+- 안쪽 page table과 바깥쪽 page table이 존재
+  - CPU가 논리 주소를 전달하면 page table 두 단계를 거쳐 주소 변환 -> 메모리 접근
+<br><br>
+
+🔎 왜 사용하는가?
+- 속도는 줄어들지 않지만 page table 공간이 줄어듦
+---
+
+### 6) Two-Level Paging Example
+- logical address (32-bit, 4K page size)의 구성
+  - 20 bit : page number
+  - 12 bit : page offset (page와 얼마나 떨어져 있는가를 나타낸 것)
+- page table 자체가 page로 구성되기 떄문에 page number가 다음과 같이 나뉨
+  - 각 page table entry : 4B
+  - 10-bit : page number
+  - 10-bit : page offset
+- logical address
+<br>
+<img width="380" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/2eaa28a2-938e-4fdd-8d2a-a2cefa94cd85">
+- p1 : outer page table의 index
+- p2 : outer page table의 page에서의 변위(displacement)
+<br><br>
+---
+
+### Address-Translation Scheme
+<img width="700" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/9866bb97-243f-441c-a9be-450d0d51f622">
+<br><br>
+
+- logical address 에서 outer-page table의 index를 찾을 page 번호를 통해 주소 변환 정보를 얻음
+- page of page table(안쪽 테이블)의 페이지 번호를 통해 물리적인 page frame 번호를 얻음
+- 해당 번호에서 d만큼 떨어진 위치에서 원하는 정보를 찾음
+
+
+<br><br>
+
+<br><br>
 references<br>
 KOCW 반효경-Introduction to Operating Systems
