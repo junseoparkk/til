@@ -77,3 +77,25 @@
   - 크게는 프로그램 전체를 하나의 세그먼트로 정의
   - 일반적으로 code, data, stack 부분이 하나씩 세그먼트로 정의
 - ex) main(), function, global variables, stack, arrays
+<br><br>
+
+### Segmentation Architecture
+- Logical address 는 <segment-number, offset> 두 가지로 구성
+- Segment table
+  - base : 세그먼트의 물리 주소 시작점
+  - limit : 세그먼트의 길이
+- STBR (Segment-table base register)
+  - 물리적 메모리에서의 segment table 위치
+- STLR (Segment-table length register)
+  - 프로그램이 사용하는 segmet 수
+<br><br>
+
+### Segmentation Hardware
+<img width="700" alt="image" src="https://github.com/junseoparkk/algorithm-study/assets/98972385/8d866a7c-5df8-40a0-92ce-bb23d40110d3">
+<br><br>
+
+---
+
+### Segmentation with Paging
+- pure segmentation과의 차이점
+    - segment-table entry가 segment의 base address를 가지고 있는 것이 아니라, segment를 구성하는 page table의 base address를 가지고 있음
