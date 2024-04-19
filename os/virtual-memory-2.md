@@ -66,7 +66,7 @@
 
 ## 2️⃣ Allocation
 
-### 1) Page Frame의 Allocation (분배)
+### 1) Page Frame의 Allocation
 - Allocation Problem : 각 프로세스에 얼마만큼의 page frame을 할당할 것인가?
 - Allocation의 필요성
   - 메모리 참조 명령어 수행시 명령어와 데이터 등 여러 page를 동시에 참조
@@ -90,11 +90,12 @@
   - FIFO, LRU, LFU 등의 알고리즘을 프로세스별로 운영시
 <br><br>
 
-### 3) Thrashing
+## 3️⃣ Thrashing
 
 <img width="600" alt="image" src="https://github.com/junseoparkk/kakao-cloud-school/assets/98972385/4d31606a-5ed7-4958-ad9f-23d5a5ec685d">
-<br><br>
+<br>
 
+### 1) Thrashing
 - 프로세스의 원활한 수행에 필요한 최소한의 page frame 수를 할당받지 못한 경우 발생
 - page fault rate이 매우 높아짐
 - CPU utilization이 낮아짐
@@ -105,7 +106,7 @@
 - 대부분의 시간에 CPU는 한가함
 ---
 
-### 4) Working-Set Model
+### 2) Working-Set Model
 - Locality of reference
   - 프로세스는 특정 시간 동안 일정 장소만을 집중적으로 참조하는 특징
   - 집중적으로 참조되는 해당 page들의 집합을 'locality Set'이라고 함
