@@ -97,3 +97,14 @@
 - 파일의 이름, 접근 권한 등 모든 메타데이터를 디렉토리가 가짐
 - FAT 이라는 별도의 테이블에 다음 블럭에 대한 정보를 가지고 있음
   - n개의 블럭이 있다면 FAT 배열의 크기가 n이 됨
+- 직접 접근이 가능
+---
+
+### 3) Free-Space Management
+
+### `Bit map or bit vector`
+<img width="400" alt="image" src="https://github.com/junseoparkk/kakao-cloud-school/assets/98972385/eefecace-fbb1-4381-9270-2a5003b90f2c">
+<br><br>
+
+- Bit map은 부가적인 공간을 필요로 함
+- 연속적인 n개의 free block을 찾는 데에 효과적
