@@ -41,6 +41,7 @@
 - 파일의 메타데이터를 메모리에 올려놓는 것
 <img width="600" alt="image" src="https://github.com/junseoparkk/kakao-cloud-school/assets/98972385/fcb584c3-d58b-4ec1-930b-e73bde98088b">
 <br><br>
+
 - ex) open("/a/b/c")
   - 디스크로부터 파일 c의 메타데이터를 메모리로 가지고 옴
   - 이를 위해 디렉토리 경로를 검색
