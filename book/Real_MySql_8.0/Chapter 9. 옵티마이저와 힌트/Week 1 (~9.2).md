@@ -280,10 +280,12 @@ LIMIT 10;
 ```
 
 - `tb_test1` 이 드라이빙되는 경우
+  
 ![image](https://github.com/user-attachments/assets/77811ac4-eb2c-48a5-a6d7-e4b5e6c32846)
 
 
 - `tb_test2` 가 드라이빙되는 경우
+  
 ![image](https://github.com/user-attachments/assets/1d144421-ab24-48d7-80bb-9b23710d6fc8)
 
 
